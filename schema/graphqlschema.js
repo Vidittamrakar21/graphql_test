@@ -57,6 +57,7 @@ const RootQuery = new GraphQLObjectType({
             type: professortype,
             args: {id: {type: GraphQLID}},
             resolve(parent,args){
+                
                 return _.find(prodata,{id: args.id})
             }
 
@@ -66,6 +67,27 @@ const RootQuery = new GraphQLObjectType({
 })
 
 
+const Mutation = new GraphQLObjectType({
+    name: 'mutationtype',
+    fields: {
+        addcourse: {
+            type: coursetype,
+            args: {id: {type: GraphQLID},
+            coursename:  {type: GraphQLString},
+            type:  {type: GraphQLString},
+            lectures:  {type: GraphQLInt},
+            professor: {
+                type: GraphQLID
+            }
+              },
+                resolve(parent, args){
+                    return _.create(coursedata, {id: args.id, coursename: args.coursename, type: args.type, lectures: args.lectures, professor: args.professor})
+                }
+        }
+    }
+})
+
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation: Mutation
 })
